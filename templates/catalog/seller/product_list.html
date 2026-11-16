@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Meus produtos · Ecomercy{% endblock %}
+
+{% block content %}
+  <h1>Meus produtos</h1>
+  <p><a href="{% url 'seller-product-create' %}">+ Cadastrar produto</a></p>
+
+  <table style="width: 100%; border-collapse: collapse;">
+    <tr>
+      <th align="left">Nome</th>
+      <th align="left">Categoria</th>
+      <th align="left">Preço</th>
+      <th align="left">Ativo</th>
+      <th></th>
+    </tr>
+    {% for product in products %}
+      <tr>
+        <td>{{ product.name }}</td>
+        <td>{{ product.category.name }}</td>
+        <td>R$ {{ product.price }}</td>
+        <td>{{ product.active|yesno:"Sim,Não" }}</td>
+        <td>
+          <a href="{% url 'seller-product-edit' product.pk %}">Editar</a>
+          · <a href="{{ product.get_absolute_url }}">Ver</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="5">Nenhum produto cadastrado.</td></tr>
+    {% endfor %}
+  </table>
+{% endblock %}

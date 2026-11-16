@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Loja · Ecomercy{% endblock %}
+
+{% block content %}
+  <h1>Loja</h1>
+
+  <form method="get">
+    {{ form.as_p }}
+    <button type="submit">Filtrar</button>
+  </form>
+
+  <ul style="list-style: none; padding: 0;">
+    {% for product in page %}
+      <li style="margin: 1rem 0; border-bottom: 1px solid #eee; padding-bottom: 1rem;">
+        <a href="{{ product.get_absolute_url }}">
+          {% for image in product.images.all|slice:":1" %}
+            <img src="{{ image.image.url }}" alt="{{ image.alt }}" width="120">
+          {% endfor %}
+          <strong>{{ product.name }}</strong>
+        </a>
+        <div>R$ {{ product.price }}</div>
+        <small>{{ product.category.name }} · {{ product.seller.seller_name|default:product.seller.username }}</small>
+      </li>
+    {% empty %}
+      <li>Nenhum produto encontrado.</li>
+    {% endfor %}
+  </ul>
+
+  {% if page.has_other_pages %}
+    <nav>
+      {% if page.has_previous %}
+        <a href="?{{ query_string }}&amp;page={{ page.previous_page_number }}">Anterior</a>
+      {% endif %}
+      <span>Página {{ page.number }} de {{ page.paginator.num_pages }}</span>
+      {% if page.has_next %}
+        <a href="?{{ query_string }}&amp;page={{ page.next_page_number }}">Próxima</a>
+      {% endif %}
+    </nav>
+  {% endif %}
+{% endblock %}

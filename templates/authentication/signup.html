@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} · Ecomercy{% endblock %}
+
+{% block content %}
+  <h1>{{ title }}</h1>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <h2>Endereço</h2>
+    {{ address_form.as_p }}
+
+    <button type="submit">Criar conta</button>
+  </form>
+
+  <p>
+    {% if kind == 'cliente' %}
+      Quer vender na Ecomercy? <a href="{% url 'signup-seller' %}">Cadastre-se como vendedor</a>.
+    {% else %}
+      Quer comprar? <a href="{% url 'signup-client' %}">Cadastre-se como cliente</a>.
+    {% endif %}
+  </p>
+  <p>Já tem conta? <a href="{% url 'login' %}">Entrar</a></p>
+{% endblock %}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Ecomercy{% endblock %}</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; color: #222; }
+    header { display: flex; justify-content: space-between; align-items: center;
+             padding: 1rem 2rem; background: #f4f4f4; border-bottom: 1px solid #ddd; }
+    header a { color: inherit; text-decoration: none; font-weight: bold; }
+    nav { display: flex; gap: 1rem; align-items: center; }
+    main { max-width: 480px; margin: 2rem auto; padding: 0 1rem; }
+    form p { margin: 0.75rem 0; }
+    label { display: block; font-weight: 600; margin-bottom: 0.25rem; }
+    input { width: 100%; padding: 0.5rem; box-sizing: border-box; }
+    button { padding: 0.5rem 1rem; cursor: pointer; }
+    .errorlist { color: #b00020; list-style: none; padding: 0; margin: 0.25rem 0; }
+    .messages { list-style: none; padding: 0; }
+    .messages li { padding: 0.5rem; background: #e8f4ff; margin-bottom: 0.5rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="{% url 'home' %}">Ecomercy</a>
+    <nav>
+      <a href="{% url 'store' %}">Loja</a>
+      {% if user.is_authenticated %}
+        {% if user.type == 1 %}<a href="{% url 'seller-products' %}">Meus produtos</a>{% endif %}
+        <a href="{% url 'account' %}">Minha conta</a>
+        <span>Olá, {{ user.username }}</span>
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit">Sair</button>
+        </form>
+      {% else %}
+        <a href="{% url 'signup-client' %}">Criar conta</a>
+        <a href="{% url 'login' %}">Entrar</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <main>
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Minha conta · Ecomercy{% endblock %}
+
+{% block content %}
+  <h1>Minha conta</h1>
+  <p>
+    Conta de
+    {% if user.type == 1 %}vendedor{% else %}cliente{% endif %}
+    · usuário <strong>{{ user.username }}</strong>
+  </p>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <h2>Endereço</h2>
+    {{ address_form.as_p }}
+
+    <button type="submit">Salvar alterações</button>
+  </form>
+{% endblock %}

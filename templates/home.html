@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  {% if user.is_authenticated %}
+    <h1>Bem-vindo, {{ user.first_name|default:user.username }}!</h1>
+    <p>
+      Conta de
+      {% if user.type == 1 %}vendedor{% else %}cliente{% endif %}.
+    </p>
+  {% else %}
+    <h1>Bem-vindo à Ecomercy</h1>
+    <p><a href="{% url 'login' %}">Entre na sua conta</a> para continuar.</p>
+  {% endif %}
+{% endblock %}

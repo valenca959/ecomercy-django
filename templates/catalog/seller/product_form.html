@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} · Ecomercy{% endblock %}
+
+{% block content %}
+  <h1>{{ title }}</h1>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <h2>Variações e estoque</h2>
+    {{ variants.management_form }}
+    {{ variants.non_form_errors }}
+    {% for variant_form in variants %}
+      <fieldset style="margin-bottom: 1rem;">{{ variant_form.as_p }}</fieldset>
+    {% endfor %}
+
+    <h2>Imagens</h2>
+    {{ images.management_form }}
+    {{ images.non_form_errors }}
+    {% for image_form in images %}
+      <fieldset style="margin-bottom: 1rem;">{{ image_form.as_p }}</fieldset>
+    {% endfor %}
+
+    <button type="submit">Salvar produto</button>
+  </form>
+
+  <p><a href="{% url 'seller-products' %}">Voltar para meus produtos</a></p>
+{% endblock %}

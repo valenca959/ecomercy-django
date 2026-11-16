@@ -1,5 +1,17 @@
-from django.db import models
+from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+from django.db import models
+
+UF_CHOICES = [
+    'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG',
+    'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO',
+]
+
+
+def validate_uf(value):
+    if value not in UF_CHOICES:
+        raise ValidationError('UF inválida. Use a sigla de um dos 27 estados.')
+
 
 class Address(models.Model):
     street = models.CharField(
@@ -27,7 +39,7 @@ class Address(models.Model):
     state = models.CharField(
         verbose_name='UF',
         max_length=2,
-        validators=[RegexValidator(regex=r'^[A-Z]{2}$', message='UF deve conter exatamente 2 letras maiúsculas.')],
+        validators=[validate_uf],
         help_text='Sigla do estado (ex: SP)'
     )
     district = models.CharField(
@@ -54,9 +66,7 @@ class Address(models.Model):
         ordering = ['city', 'district', 'street']
 
     def __str__(self):
-        # Improve formatting and include relevant information
         street_number = f'{self.street}, {self.number}'
         if self.complement:
             street_number += f' - {self.complement}'
         return f'{street_number}, {self.district}, {self.city} - {self.state} - CEP: {self.zipcode}'
-
